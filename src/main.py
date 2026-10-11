@@ -1,7 +1,8 @@
 import os
 import shutil
+import sys
 
-from generatepage import generate_page, generate_pages_recursive
+from generatepage import generate_pages_recursive
 
 
 def copy_src_content_to_dest(src: str, dest: str) -> None:
@@ -31,9 +32,12 @@ def copy_src_content_to_dest_recurse(src: str, dest: str, prefix: str = "") -> N
             copy_src_content_to_dest_recurse(src, dest, path)
 
 def main() -> None:
-    copy_src_content_to_dest("static", "public")
-    #generate_page("content/index.md", "template.html", "public/index.html")
-    generate_pages_recursive("content", "template.html", "public")
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    else:
+        basepath = "/"
+    copy_src_content_to_dest("static", "docs")
+    generate_pages_recursive(basepath, "content", "template.html", "docs")
 
 if __name__ == "__main__":
     main()
